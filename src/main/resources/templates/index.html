@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org/">
+<head>
+    <meta charset="UTF-8" />
+    <title th:text="${title}">Title</title>
+</head>
+<body>
+    <h1 th:text="${title}"></h1>
+    <p th:text="${description}"></p>
+<form method="post">
+    <input type="text" id ="location" name ="location" placeholder="Zip Or City,State" />
+    <select id="distance" name="distance" >
+        <option value="5">5 Miles</option>
+        <option value="10">10 Miles</option>
+        <option value="25">25 Miles</option>
+        <option value="50">50 Miles</option>
+    </select>
+    <input type ="submit" value="Search" />
+
+
+</form>
+    <p th:text="${searchLocation}"></p>
+    <p th:text="${searchDistance}"></p>
+</body>
+</html>
