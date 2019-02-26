@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<head>
+    <meta charset="UTF-8" />
+    <title th:text="${title}">Title</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+    <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body class="container">
+<address>
+    <h4><strong><span th:text="${currentmall.mallName}" /></strong></h4>
+<span th:text="${currentmall.mallAddress.streetAddress}"></span><br>
+<span th:text="${currentmall.mallAddress.city + ', ' + currentmall.mallAddress.state + ' ' +
+                                 currentmall.mallAddress.zip}"></span><br>
+<span th:text="${currentmall.phoneNumber}"></span>
+</address>
+<div th:if="${currentmall.stores}"><hr>
+    <h4><strong>Stores List</strong></h4>
+    <div class="container">
+    <ul th:each="store : ${currentmall.stores}">
+        <li th:text="${store.storeName}"></li>
+    </ul>
+    </div>
+</div>
+</body>
+</html>

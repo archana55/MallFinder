@@ -3,8 +3,10 @@
 <head>
     <meta charset="UTF-8" />
     <title th:text="${title}">Title</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+    <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
-<body>
+<body class="container">
     <h1 th:text="${title}"></h1>
     <p th:text="${description}"></p>
 <form method="post">
@@ -19,7 +21,33 @@
 
 
 </form>
-    <p th:text="${searchLocation}"></p>
-    <p th:text="${searchDistance}"></p>
+<div th:if="${malls} and ${malls.size()}">
+<table class="table">
+
+    <tr>
+        <th>List</th>
+    </tr>
+    <tr>
+        <td width="50%">
+            <div>
+                <table Class="table" border="0">
+                    <tr th:each="mall:${malls}">
+                        <td>
+                            <address>
+                                <strong><a th:text="${mall.mallName}"
+                                th:href="'/malldetails/' +${mall.id}"/></strong><br>
+                                <span th:text="${mall.mallAddress.streetAddress}"></span><br>
+                                <span th:text="${mall.mallAddress.city + ', ' + mall.mallAddress.state + ' ' +
+                                 mall.mallAddress.zip}"></span><br>
+                                <span th:text="${mall.phoneNumber}"></span>
+                            </address>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </td>
+    </tr>
+</table>
+</div>
 </body>
 </html>
