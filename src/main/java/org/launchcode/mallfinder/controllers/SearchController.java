@@ -1,18 +1,24 @@
 package org.launchcode.mallfinder.controllers;
 
 import org.launchcode.mallfinder.models.Address;
+import org.launchcode.mallfinder.models.Review;
 import org.launchcode.mallfinder.models.data.MallDao;
+import org.launchcode.mallfinder.models.data.ReviewDao;
 import org.launchcode.mallfinder.models.data.StoreDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
 import org.launchcode.mallfinder.models.Mall;
+
+import javax.validation.Valid;
 
 @Controller
 public class SearchController {
@@ -26,6 +32,9 @@ public class SearchController {
 
     @Autowired
     private StoreDao storeDao;
+
+    @Autowired
+    private ReviewDao reviewDao;
 
     @RequestMapping(value = "",method = RequestMethod.GET)
     public String index(Model model) {
@@ -87,4 +96,27 @@ public class SearchController {
         model.addAttribute("currentmall" ,m1.get());
         return "malldetails";
     }
+
+    @RequestMapping(value ="review/{id}", method = RequestMethod.GET)
+    public String displayReviewForm(@PathVariable int id, Model model){
+
+        Optional<Mall> m1 = mallDao.findById(id);
+        model.addAttribute("currentmall" ,m1.get());
+        model.addAttribute("currentreview",new Review());
+        return "review";
+    }
+
+    @RequestMapping(value ="review/{id}", method = RequestMethod.POST)
+    public String processReviewForm(@PathVariable int id, Model model ,
+                                    @ModelAttribute  @Valid Review newReview){
+
+        newReview.setDate(new Date());
+        Optional<Mall> m1 = mallDao.findById(id);
+       // m1.get().addReview(newReview);
+        newReview.setMall(m1.get());
+        reviewDao.save(newReview);
+        model.addAttribute("currentmall" ,m1.get());
+        return "redirect:/malldetails/" + id;
+    }
+
 }

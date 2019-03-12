@@ -5,18 +5,22 @@
     <title th:text="${title}">Title</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
     <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script async defer
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAkICQK4MNLd5Vah3dsVbXGJlwq8eeRXeY&callback=initMap">
+    </script>
 </head>
 <body class="container">
     <h1 th:text="${title}"></h1>
     <p th:text="${description}"></p>
 <form method="post">
     <input type="text" id ="location" name ="location" placeholder="Zip Or City,State" />
-    <select id="distance" name="distance" >
+    <input type ="hidden" id="distance" name="distance" value="5"/>
+    <!--<select id="distance" name="distance" >
         <option value="5">5 Miles</option>
         <option value="10">10 Miles</option>
         <option value="25">25 Miles</option>
         <option value="50">50 Miles</option>
-    </select>
+    </select> -->
     <input type ="submit" value="Search" />
 
 
@@ -26,6 +30,7 @@
 
     <tr>
         <th>List</th>
+        <th>MAP</th>
     </tr>
     <tr>
         <td width="50%">
@@ -45,6 +50,33 @@
                     </tr>
                 </table>
             </div>
+        </td>
+        <td>
+            <div id="map-container-google-1" class="z-depth-1-half map-container" style="height: 500px">
+
+            </div>
+            <script th:inline="javascript">
+                function initMap() {
+
+
+                  // The map, centered at first item
+                  var firstMall = {lat: /*[[${malls[0].mallAddress.latitude}]]*/, lng: /*[[${malls[0].mallAddress.longitude}]]*/};
+                  // The map, centered at first mall
+                  var map = new google.maps.Map(
+                  document.getElementById('map-container-google-1'), {zoom: 10, center: firstMall});
+                  var infoWindow = new google.maps.InfoWindow();
+                  /*<![CDATA[*/
+                  /*[# th:each="mall : ${malls}"]*/
+                  var pos = new google.maps.LatLng(/*[[${mall.mallAddress.latitude}]]*/, /*[[${mall.mallAddress.longitude}]]*/);
+                  var marker = new google.maps.Marker({position: pos, map: map});
+                  google.maps.event.addListener(marker, 'mouseover', function() {
+                  infoWindow.setContent('<h4>' + /*[[${mall.mallName}]]*/ + '</h4>');
+                  infoWindow.open(map, this);
+                  });
+                  /*[/]*/
+                  /*]]>*/
+                }
+                </script>
         </td>
     </tr>
 </table>

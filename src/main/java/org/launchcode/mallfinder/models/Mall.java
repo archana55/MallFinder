@@ -17,6 +17,11 @@ public class Mall {
 
     @ManyToMany(mappedBy = "malls")
     private List<Store> stores;
+
+    @OneToMany
+    @JoinColumn(name = "mall_id")
+    private List<Review> reviews;
+
     public Mall() {
     }
 
@@ -26,9 +31,7 @@ public class Mall {
         this.phoneNumber = phoneNumber;
     }
 
-    public List<Store> getStores() {
-        return stores;
-    }
+
 
     public int getId() {
         return id;
@@ -56,5 +59,17 @@ public class Mall {
 
     public void setPhone_number(String phone_number) {
         this.phoneNumber = phone_number;
+    }
+
+    public List<Store> getStores() {
+        return stores;
+    }
+
+    public List<Review> getReviews() {
+        return reviews;
+    }
+
+    public void addReview(Review rev){
+        reviews.add(rev);
     }
 }

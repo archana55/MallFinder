@@ -5,21 +5,101 @@
     <title th:text="${title}">Title</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
     <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script async defer
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAkICQK4MNLd5Vah3dsVbXGJlwq8eeRXeY&callback=initMap">
+    </script>
+
 </head>
 <body class="container">
-<address>
-    <h4><strong><span th:text="${currentmall.mallName}" /></strong></h4>
-<span th:text="${currentmall.mallAddress.streetAddress}"></span><br>
-<span th:text="${currentmall.mallAddress.city + ', ' + currentmall.mallAddress.state + ' ' +
+<table class="table">
+    <tr>
+        <td width="50%">
+            <button onclick="goBack()">Go Back</button>
+
+            <script>
+            function goBack() {
+            window.history.back();
+            }
+            </script><br><br>
+            <address>
+               <h4><strong><span th:text="${currentmall.mallName}" /></strong></h4>
+               <span th:text="${currentmall.mallAddress.streetAddress}"></span><br>
+                <span th:text="${currentmall.mallAddress.city + ', ' + currentmall.mallAddress.state + ' ' +
                                  currentmall.mallAddress.zip}"></span><br>
-<span th:text="${currentmall.phoneNumber}"></span>
-</address>
+                <span th:text="${currentmall.phoneNumber}"></span><br><br>
+                <span><a th:href="'https://www.google.com/maps/dir/?api=1&destination='
+                        + ${currentmall.mallAddress.latitude} + ',' + ${currentmall.mallAddress.longitude}"
+                      th:target="_blank">Get Directions</a></span>
+            </address>
+        </td>
+        <td>
+            <div id="map-container-google-1" class="z-depth-1-half map-container"
+                 style="height: 250px; width: 45%; float: left"> </div>
+            <div id="pano" class="z-depth-1-half map-container"
+                 style="height: 250px; width: 45%; float: left;"> </div>
+
+
+            <script th:inline="javascript">
+
+           // Initialize and add the map
+           function initMap() {
+
+               var lat = /*[[${currentmall.mallAddress.latitude}]]*/'lat';
+               var lon = /*[[${currentmall.mallAddress.longitude}]]*/'lon';
+
+              var center = {lat: lat, lng: lon};
+
+              var map = new google.maps.Map(
+                           document.getElementById('map-container-google-1'), {zoom: 14, center: center});
+
+              var panorama = new google.maps.StreetViewPanorama(
+                  document.getElementById('pano'), {
+                      position: center
+                  });
+              map.setStreetView(panorama);
+
+           }
+           </script>
+        </td>
+    </tr>
+</table>
 <div th:if="${currentmall.stores}"><hr>
     <h4><strong>Stores List</strong></h4>
     <div class="container">
     <ul th:each="store : ${currentmall.stores}">
         <li th:text="${store.storeName}"></li>
     </ul>
+    </div>
+</div>
+<a th:href="'/review/' +${currentmall.id}">Write a Review</a></strong><br>
+<div th:if="${currentmall.reviews}"><hr>
+    <h4><strong>Mall Reviews</strong></h4>
+
+    <div>
+        <table class="table-borderless"   border="0"  th:each="review : ${currentmall.reviews}">
+            <tr>
+                <td>Title:</td>
+                <td th:text="${review.title}"></td>
+            </tr>
+            <tr>
+                <td>Date:</td>
+                <td th:text="${#dates.format(review.date, 'dd-MMM-yyyy HH:MM')}"></td>
+            </tr>
+            <tr>
+                <td>Name:</td>
+                <td th:text="${review.author}"></td>
+            </tr>
+            <tr>
+                <td>Rating: </td>
+                <td th:text="${review.rating}"></td>
+            </tr>
+
+            <tr>
+                <td>Review:</td>
+                <td th:text="${review.textReview}"></td>
+            </tr>
+
+        </table>
     </div>
 </div>
 </body>
